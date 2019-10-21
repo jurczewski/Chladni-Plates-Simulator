@@ -29,7 +29,7 @@
   \studentinfo[210209@edu.p.lodz.pl]{Bartosz Jurczewski}{210209}%
 }
 
-\title{Zadanie 1.: Symulacja wahadła z ciałem stałym sypkim }
+\title{Zadanie: Symulacja płytki Chladniego }
 
 \begin{document}
 \maketitle
@@ -38,32 +38,24 @@
 \newpage
 
 \section{Wstęp}
-Zadaniem tworzonej przez nas aplikacji i modelu jest badanie toru po którym poruszało się będzie wahadło z którego wysypuje się sypki materiał. \\
-W symulacji zmianie będą mogły podlegać takie parametry jak: prędkość początkowa, początkowa masa, prędkość wysypywana się piasku, długość wahadła, początkowy kierunek ruchu i początkowe odchylenie wahadła.
+Zadaniem tworzonej przez nas aplikacji i modelu jest badanie drgań stalowej płytki wykonanej ze sprężystego materiału. \\
+W symulacji zmianie będą mogły podlegać takie parametry jak: częstotliwość drgań, rozmiar kwadratowej płytki.
 
 \section{Opis układu}
-Symulacja wahadła będzie odbywać się w przestrzeni trójwymiarowej, a wizualizacją jego ruchu będą wzory pojawiające się na dwuwymiarowej płaszczyźnie. 
+Symulacja układu będzie odbywać się w przestrzeni dwuwymiarowej, gdzie będziemy badać naprężenia występujące w stalowej płytce. 
 
 \section{Opis obiektów biorących udział w symulacji}
-W naszej symulacji możemy wyróżnić dwa główne obiekty, będą fundamentem zagadnienia które chcemy symulować. Są to: wahadło, pole grawitacyjne i płaszczyzna na której pojawiają się ślady z sypkiego materiału wypełniającego wahadło.
+W naszej symulacji możemy wyróżnić jeden główny obiekt będący fundamentem zagadnienia które chcemy symulować. Jest to wprawiona w drgania stalowa płyta. Zakładamy, że jest ona wykonana z materiału o określonej przez nas \colorbox{red}{?} sprężystości o kształcie płaskiego kwadratu, długość boku którego jest parametrem wejściowym symulacji.
 
-\subsection{Wahadło}
-
-\subsection{Płaszczyzna}
-
-\subsection{Pole grawitacyjne}
-
-\section{Opis oddziaływań między obiektami}
-Pole grawitacyjne w którym porusza się wahadło powoduje powstanie siły działającej na wahadło skierowanej w dół. Wartość tej siły zależna jest od masy wahadła w danej chwili. Sypki materiał wysypujący się z wahadła odkłada się na dwuwymiarowej płaszczyźnie nad którą porusza się wahadło. Umiejscowienie materiału na płaszczyźnie zależne jest od chwilowego położenia wahadła.  
+W celu zasymulowania zachowania obiektu przedstawimy go w postaci siatki trójkątów. \colorbox{red}{?}
 
 \section{Uproszczenia}
 W naszym modelu i symulacji przyjęliśmy kilka następujących uproszczeń:
 \begin{itemize}
-    \item Brak oporów ruchu.
-    \item W rozpatrywanym przez nas przypadku pole grawitacyjne jest zawsze jednorodne.
-    \item Parametry wejściowe symulacji można zmieniać podawać w zakresach przyjętych przez nas i zamieszczonych w tym sprawozdaniu.
+	\item Brak oporów ruchu.
+	\item W rozpatrywanym przez nas przypadku materiał z ktorego wykonana jest rozpatrywana płyta jest jednorodny oraz izotropowy -- jego gęstość jest taka sama w każdym punkcie, a moduł Younga jest niezależny od kierunku.
+	\item Parametry wejściowe symulacji można zmieniać podawać w zakresach przyjętych przez nas i zamieszczonych w tym sprawozdaniu.
 \end{itemize}
-
 
 \section{Środowisko i biblioteka graficzna}
 Program zostanie zrealizowany w środowisku graficznym Unity\\ (\url{www.unity.com}) za pomocą języka do niego przeznaczonego - C\#.
@@ -72,6 +64,8 @@ Program zostanie zrealizowany w środowisku graficznym Unity\\ (\url{www.unity.c
   \bibitem{l2short} T. Oetiker, H. Partl, I. Hyna, E. Schlegl.
     \textsl{Nie za krótkie wprowadzenie do systemu \LaTeX2e}, 2007, dostępny
     online.
+  \bibitem{l2short} T. Müller
+    \textsl{Numerical Chladni figures}, 2013, \url{https://arxiv.org/pdf/1308.5523.pdf}
 \end{thebibliography}
 
 \end{document}
