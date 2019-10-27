@@ -12,8 +12,7 @@ namespace Chladni_Plates
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly int NUMBER_OF_PARTICLES = 1000;
-        private readonly Color BLACK = Color.FromArgb(255, 255, 255);
+        private readonly int NUMBER_OF_PARTICLES = 2000;
 
         public MainWindow()
         {
@@ -25,7 +24,8 @@ namespace Chladni_Plates
             int width = Convert.ToInt32(PixelBox.Width);
             int height = Convert.ToInt32(PixelBox.Height);
 
-            var bitmap = RandomColorPixelBitmap(width, height);
+            //var bitmap = RandomColorPixelBitmap(width, height);
+            var bitmap = RandomPixelsBitmap(width, height);
 
             PixelBox.Source = BitmapToImageSource(bitmap);
         }
@@ -53,6 +53,30 @@ namespace Chladni_Plates
             }
 
             return bitmap;
+        }
+
+        private Bitmap RandomPixelsBitmap(int width, int height)
+        {
+            Bitmap bitmap = new Bitmap(width, height);
+            FillBitmapWithColor(Color.LightGray, ref bitmap);
+
+            Random random = new Random();
+
+            for (int i = 0; i < NUMBER_OF_PARTICLES; i++)
+            {
+                int x = random.Next(0, width);
+                int y = random.Next(0, height);
+                bitmap.SetPixel(x, y, Color.Black);
+            }
+
+            return bitmap;
+        }
+
+        private void FillBitmapWithColor(Color color, ref Bitmap bitmap)
+        {
+            using Graphics gfx = Graphics.FromImage(bitmap);
+            using SolidBrush brush = new SolidBrush(color);
+            gfx.FillRectangle(brush, 0, 0, bitmap.Width, bitmap.Height);
         }
 
         private BitmapImage BitmapToImageSource(Bitmap bitmap)
