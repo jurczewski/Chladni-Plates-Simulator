@@ -1,25 +1,30 @@
 ﻿<Window x:Class="Chladni_Plates.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Chladni_Plates"
         mc:Ignorable="d"
         Title="Chladni Plates Simulator"  Width="700" Height="500">
     <Grid Height="460">
         <Image Margin="250,10,10,10" Width="440" HorizontalAlignment="Left" Name="PixelBox" Height="440"/>
         <Label Content="Chladni-Plates-Simulator" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="229" FontSize="20"/>
-        <Slider HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Width="229" Name="FrequencySlider" IsSnapToTickEnabled="True" TickFrequency="1"/>
-        <Button Content="Generate" HorizontalAlignment="Left" Margin="10,353,0,0" VerticalAlignment="Top" Width="229" Height="46" Name="Generate" Click="Generate_Click"/>
-        <Button Content="Save to file" HorizontalAlignment="Left" Margin="10,404,0,0" VerticalAlignment="Top" Width="229" Height="46" Name="SaveToFile"/>
+        
+        <!-- Frequency -->
         <Label Content="Change frequency" HorizontalAlignment="Left" Margin="10,84,0,0" VerticalAlignment="Top" Width="229"/>
+        <Slider HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Width="229" Name="FrequencySlider" IsSnapToTickEnabled="True" TickFrequency="1"/>
         <Label Content="Current value:" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="109"/>
         <Label Content="{Binding ElementName=FrequencySlider, Path=Value}" HorizontalAlignment="Left" Margin="124,150,0,0" VerticalAlignment="Top" Width="89" Name="Frequency"/>
         <Label Content="hz" HorizontalAlignment="Left" Margin="213,150,0,0" VerticalAlignment="Top" Width="26"/>
-        <Slider HorizontalAlignment="Left" Margin="10,239,0,0" VerticalAlignment="Top" Width="229" x:Name="ParticlesSlider" IsSnapToTickEnabled="True" TickFrequency="1"/>
+        
+        <!-- Number of particles -->        
         <Label Content="Change number of particles" HorizontalAlignment="Left" Margin="10,208,0,0" VerticalAlignment="Top" Width="229"/>
+        <Slider HorizontalAlignment="Left" Margin="10,239,0,0" VerticalAlignment="Top" Width="229" x:Name="ParticlesSlider" IsSnapToTickEnabled="True" TickFrequency="1"/>
         <Label Content="Current value:" HorizontalAlignment="Left" Margin="10,274,0,0" VerticalAlignment="Top" Width="109"/>
-        <Label Content="{Binding Value, ElementName=ParticlesSlider}" HorizontalAlignment="Left" Margin="124,274,0,0" VerticalAlignment="Top" Width="60" x:Name="Frequency_Copy"/>
+        <Label Content="{Binding Value, ElementName=ParticlesSlider}" HorizontalAlignment="Left" Margin="124,274,0,0" VerticalAlignment="Top" Width="60" x:Name="NumberOfParticles"/>
         <Label Content="particles" HorizontalAlignment="Left" Margin="184,274,0,0" VerticalAlignment="Top" Width="55"/>
+
+        <!-- Buttons -->
+        <Button Content="Generate" HorizontalAlignment="Left" Margin="10,353,0,0" VerticalAlignment="Top" Width="229" Height="46" Name="Generate" Click="Generate_Click"/>
+        <Button Content="Save to file" HorizontalAlignment="Left" Margin="10,404,0,0" VerticalAlignment="Top" Width="229" Height="46" Name="SaveToFile" Click="SaveToFile_Click"/>
     </Grid>
 </Window>

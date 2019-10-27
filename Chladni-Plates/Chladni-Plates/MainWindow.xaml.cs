@@ -31,20 +31,19 @@ namespace Chladni_Plates
 
         private Bitmap RandomColorPixelBitmap(int width, int height)
         {
-            Bitmap bitmap = new Bitmap(width, height);
-
-            Random random = new Random();
+            var bitmap = new Bitmap(width, height);
+            var random = new Random();
 
             //create random pixels
-            for (int y = 0; y < height; y++)
+            for (var y = 0; y < height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (var x = 0; x < width; x++)
                 {
                     //generate random ARGB
-                    int a = random.Next(256);
-                    int r = random.Next(256);
-                    int g = random.Next(256);
-                    int b = random.Next(256);
+                    var a = random.Next(256);
+                    var r = random.Next(256);
+                    var g = random.Next(256);
+                    var b = random.Next(256);
 
                     //set
                     bitmap.SetPixel(x, y, Color.FromArgb(a, r, g, b));
@@ -56,15 +55,15 @@ namespace Chladni_Plates
 
         private Bitmap RandomPixelsBitmap(int width, int height, int numberOfParticles)
         {
-            Bitmap bitmap = new Bitmap(width, height);
+            var bitmap = new Bitmap(width, height);
             FillBitmapWithColor(Color.LightGray, ref bitmap);
 
-            Random random = new Random();
+            var random = new Random();
 
             for (int i = 0; i < numberOfParticles; i++)
             {
-                int x = random.Next(0, width);
-                int y = random.Next(0, height);
+                var x = random.Next(0, width);
+                var y = random.Next(0, height);
                 bitmap.SetPixel(x, y, Color.Black);
             }
 
@@ -83,13 +82,24 @@ namespace Chladni_Plates
             using MemoryStream memory = new MemoryStream();
             bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
             memory.Position = 0;
-            BitmapImage bitmapimage = new BitmapImage();
+            var bitmapimage = new BitmapImage();
             bitmapimage.BeginInit();
             bitmapimage.StreamSource = memory;
             bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
             bitmapimage.EndInit();
 
             return bitmapimage;
+        }
+
+        private Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
+        {
+            using MemoryStream outStream = new MemoryStream();
+            var enc = new BmpBitmapEncoder();
+            enc.Frames.Add(BitmapFrame.Create(bitmapImage));
+            enc.Save(outStream);
+            var bitmap = new Bitmap(outStream);
+
+            return new Bitmap(bitmap);
         }
 
         #region Handlers
@@ -102,6 +112,15 @@ namespace Chladni_Plates
             using var bitmap = RandomPixelsBitmap(width, height, numberOfParticles);
             PixelBox.Source = BitmapToImageSource(bitmap);
         }
+
+        private void SaveToFile_Click(object sender, RoutedEventArgs e)
+        {
+            using var bitmap = BitmapImage2Bitmap((BitmapImage)PixelBox.Source);
+            var path = Directory.GetCurrentDirectory();
+            bitmap.Save(path + $"/Chladni-Plates-Frequency-{FrequencySlider.Value}Hz-Particles{ParticlesSlider.Value}.png");
+        }
         #endregion
+
+
     }
 }
