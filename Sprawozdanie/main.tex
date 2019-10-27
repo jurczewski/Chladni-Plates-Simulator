@@ -40,7 +40,7 @@
 
 \section{Wstęp}
 Zadaniem tworzonej przez nas aplikacji i modelu jest badanie drgań stalowej płytki wykonanej ze sprężystego materiału. \\
-W symulacji zmianie będą mogły podlegać takie parametry jak: częstotliwość drgań, rozmiar kwadratowej płytki.
+W symulacji zmianie będą mogły podlegać takie parametry jak: częstotliwość drgań i ilość ziaren(cząstek) substancji sypkiej.
 
 \section{Opis układu}
 Symulacja układu będzie odbywać się w przestrzeni dwuwymiarowej, gdzie będziemy badać naprężenia występujące w stalowej płytce. 
@@ -51,7 +51,8 @@ W naszej symulacji możemy wyróżnić jeden główny obiekt będący fundamente
 Drgania własne dwuwymiarowej membrany można opisać równaniem falowym Bernoulliego
 \begin{equation}
 \frac{1}{c^2}\frac{\partial^2 \Psi}{\partial t^2}-\nabla ^2 \Psi = 0,\quad
-\Psi \in \Omega \prod \R,\quad
+\Psi \in \Omega \prod %\R
+,\quad
 \Omega \subset,
 \end{equation}
 gdzie $c$ jest prędkością rozchodzenia a $\Omega$ ograniczoną przestrzenią rozważań w $\mathbb{R}^2$.
@@ -85,7 +86,7 @@ Program zostanie zrealizowany w środowisku graficznym Unity\\ (\url{www.unity.c
   \bibitem{l2short} T. Oetiker, H. Partl, I. Hyna, E. Schlegl.
     \textsl{Nie za krótkie wprowadzenie do systemu \LaTeX2e}, 2007, dostępny
     online.
-  \bibitem{l2short} T. Müller
+  \bibitem{numerical} T. Müller
     \textsl{Numerical Chladni figures}, 2013, \url{https://arxiv.org/pdf/1308.5523.pdf}
 \end{thebibliography}
 
