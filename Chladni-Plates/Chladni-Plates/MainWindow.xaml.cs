@@ -19,7 +19,14 @@ namespace Chladni_Plates
             FrequencySlider.Maximum = 6000;
 
             ParticlesSlider.Minimum = 1;
-            ParticlesSlider.Maximum = 100000;
+            ParticlesSlider.Maximum = 100000; //todo: consider width*height;
+
+            //Set bg to gray
+            var width = Convert.ToInt32(PixelBox.Width);
+            var height = Convert.ToInt32(PixelBox.Height);
+            var bitmap = new Bitmap(width, height);
+            FillBitmapWithColor(Color.LightGray, ref bitmap);
+            PixelBox.Source = BitmapToImageSource(bitmap);
         }
 
         private Bitmap RandomColorPixelBitmap(int width, int height)
@@ -88,8 +95,8 @@ namespace Chladni_Plates
         #region Handlers
         private void Generate_Click(object sender, RoutedEventArgs e)
         {
-            int width = Convert.ToInt32(PixelBox.Width);
-            int height = Convert.ToInt32(PixelBox.Height);
+            var width = Convert.ToInt32(PixelBox.Width);
+            var height = Convert.ToInt32(PixelBox.Height);
             var numberOfParticles = Convert.ToInt32(ParticlesSlider.Value);
 
             using var bitmap = RandomPixelsBitmap(width, height, numberOfParticles);
