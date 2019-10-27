@@ -1,0 +1,21 @@
+﻿<Window x:Class="Chladni_Plates.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Chladni_Plates"
+        mc:Ignorable="d"
+        Title="Chladni Plates Simulator"  Width="700" Height="500">
+    <Grid Height="460">
+        <Image Margin="250,10,10,10" Width="440" HorizontalAlignment="Left" Name="PixelBox" Height="440"/>
+        <Label Content="Chladni-Plates-Simulator" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="229" FontSize="20"/>
+        <Slider HorizontalAlignment="Left" Margin="10,129,0,0" VerticalAlignment="Top" Width="229" Name="FrequencySlider" />
+        <Button Content="Generate" HorizontalAlignment="Left" Margin="10,261,0,0" VerticalAlignment="Top" Width="229" Height="46" Name="Generate"/>
+        <Button Content="Save to file" HorizontalAlignment="Left" Margin="10,312,0,0" VerticalAlignment="Top" Width="229" Height="46" Name="SaveToFile"/>
+        <Label Content="Change frequency" HorizontalAlignment="Left" Margin="10,98,0,0" VerticalAlignment="Top" Width="229"/>
+        <Label Content="Current value:" HorizontalAlignment="Left" Margin="10,164,0,0" VerticalAlignment="Top" Width="109"/>
+        <Label Content="" HorizontalAlignment="Left" Margin="124,164,0,0" VerticalAlignment="Top" Width="115" Name="Frequency"/>
+
+
+    </Grid>
+</Window>
