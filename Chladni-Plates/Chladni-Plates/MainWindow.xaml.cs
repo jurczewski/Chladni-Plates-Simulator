@@ -13,6 +13,7 @@ namespace Chladni_Plates
     public partial class MainWindow : Window
     {
         private readonly int NUMBER_OF_PARTICLES = 1000;
+        private readonly Color BLACK = Color.FromArgb(255, 255, 255);
 
         public MainWindow()
         {
@@ -21,11 +22,17 @@ namespace Chladni_Plates
             FrequencySlider.Minimum = 300;
             FrequencySlider.Maximum = 6000;
 
-            int width = 440, height = 440;
-            width = Convert.ToInt32(PixelBox.Width);
-            height = Convert.ToInt32(PixelBox.Height);
+            int width = Convert.ToInt32(PixelBox.Width);
+            int height = Convert.ToInt32(PixelBox.Height);
 
-            using Bitmap bitmap = new Bitmap(width, height);
+            var bitmap = RandomColorPixelBitmap(width, height);
+
+            PixelBox.Source = BitmapToImageSource(bitmap);
+        }
+
+        private Bitmap RandomColorPixelBitmap(int width, int height)
+        {
+            Bitmap bitmap = new Bitmap(width, height);
 
             Random random = new Random();
 
@@ -45,7 +52,7 @@ namespace Chladni_Plates
                 }
             }
 
-            PixelBox.Source = BitmapToImageSource(bitmap);
+            return bitmap;
         }
 
         private BitmapImage BitmapToImageSource(Bitmap bitmap)
