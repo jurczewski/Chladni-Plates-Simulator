@@ -3,7 +3,6 @@ using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using Color = System.Drawing.Color;
 
 namespace Chladni_Plates
 {
@@ -12,8 +11,6 @@ namespace Chladni_Plates
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly int NUMBER_OF_PARTICLES = 2000;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -21,13 +18,8 @@ namespace Chladni_Plates
             FrequencySlider.Minimum = 300;
             FrequencySlider.Maximum = 6000;
 
-            int width = Convert.ToInt32(PixelBox.Width);
-            int height = Convert.ToInt32(PixelBox.Height);
-
-            //var bitmap = RandomColorPixelBitmap(width, height);
-            var bitmap = RandomPixelsBitmap(width, height);
-
-            PixelBox.Source = BitmapToImageSource(bitmap);
+            ParticlesSlider.Minimum = 1;
+            ParticlesSlider.Maximum = 100000;
         }
 
         private Bitmap RandomColorPixelBitmap(int width, int height)
@@ -55,14 +47,14 @@ namespace Chladni_Plates
             return bitmap;
         }
 
-        private Bitmap RandomPixelsBitmap(int width, int height)
+        private Bitmap RandomPixelsBitmap(int width, int height, int numberOfParticles)
         {
             Bitmap bitmap = new Bitmap(width, height);
             FillBitmapWithColor(Color.LightGray, ref bitmap);
 
             Random random = new Random();
 
-            for (int i = 0; i < NUMBER_OF_PARTICLES; i++)
+            for (int i = 0; i < numberOfParticles; i++)
             {
                 int x = random.Next(0, width);
                 int y = random.Next(0, height);
@@ -92,5 +84,17 @@ namespace Chladni_Plates
 
             return bitmapimage;
         }
+
+        #region Handlers
+        private void Generate_Click(object sender, RoutedEventArgs e)
+        {
+            int width = Convert.ToInt32(PixelBox.Width);
+            int height = Convert.ToInt32(PixelBox.Height);
+            var numberOfParticles = Convert.ToInt32(ParticlesSlider.Value);
+
+            using var bitmap = RandomPixelsBitmap(width, height, numberOfParticles);
+            PixelBox.Source = BitmapToImageSource(bitmap);
+        }
+        #endregion
     }
 }
