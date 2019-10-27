@@ -3,6 +3,7 @@
 \frenchspacing
 
 \usepackage{graphicx}
+\usepackage{amssymb}
 \usepackage[usenames,dvipsnames]{color}
 \usepackage[hidelinks]{hyperref}
 
@@ -45,15 +46,35 @@ W symulacji zmianie będą mogły podlegać takie parametry jak: częstotliwoś�
 Symulacja układu będzie odbywać się w przestrzeni dwuwymiarowej, gdzie będziemy badać naprężenia występujące w stalowej płytce. 
 
 \section{Opis obiektów biorących udział w symulacji}
-W naszej symulacji możemy wyróżnić jeden główny obiekt będący fundamentem zagadnienia które chcemy symulować. Jest to wprawiona w drgania stalowa płyta. Zakładamy, że jest ona wykonana z materiału o określonej przez nas \colorbox{red}{?} sprężystości o kształcie płaskiego kwadratu, długość boku którego jest parametrem wejściowym symulacji.
+W naszej symulacji możemy wyróżnić jeden główny obiekt będący fundamentem zagadnienia które chcemy symulować. Jest to wprawiona w drgania stalowa płyta. Zakładamy, że jest ona wykonana z materiału o kształcie płaskiego kwadratu, długość boku którego jest parametrem wejściowym symulacji.
 
-W celu zasymulowania zachowania obiektu przedstawimy go w postaci siatki trójkątów. \colorbox{red}{?}
+Drgania własne dwuwymiarowej membrany można opisać równaniem falowym Bernoulliego
+\begin{equation}
+\frac{1}{c^2}\frac{\partial^2 \Psi}{\partial t^2}-\nabla ^2 \Psi = 0,\quad
+\Psi \in \Omega \prod \R,\quad
+\Omega \subset,
+\end{equation}
+gdzie $c$ jest prędkością rozchodzenia a $\Omega$ ograniczoną przestrzenią rozważań w $\mathbb{R}^2$.
+Założenie, że $\Psi(t, x, y) = v(t) \times u(x, y)$ daje nam dwa równania różniczkowe
+\begin{equation}
+\partial^2_t v+\lambda c^2v=0
+\quad \mathrm{and} \quad
+\nabla ^2 u +\lambda u=0
+\end{equation}
+z dodatnią stałą $\lambda$.
+Rozwiązanie równania dla $v(t)$ ma postać $v(t)=a \cos{\omega t}+b \sin{\omega t}$, gdzie $\omega=c \sqrt{\lambda}$. Cząstkowe równanie różniczkowe dla $u(x, y)$ w (2) doprowadza nas do problemu wartości własnej Laplasjanu, który próbujemy rozwiązać.
+Po rozbiciu rozważanej powierzchni na siatkę kwadratów, możemy skorzystać z metody elementów skończonych aby rozwiązać równanie 
+\begin{equation}
+\mathcal{S} = \frac{1}{2}\iint_\Omega [(\partial_x u)^2+(\partial_y u)^2-\lambda u^2]\mathrm{d}x\mathrm{d}y+\frac{1}{2}\int_{\partial \Omega} u^2\mathrm{d}s
+\end{equation}
+dla układu wartości własnych, który pozwala powiązać z macierz sztywności z macierzą masy, jednocześnie wyznaczając
+amplitudę węzła siatki. 
 
 \section{Uproszczenia}
 W naszym modelu i symulacji przyjęliśmy kilka następujących uproszczeń:
 \begin{itemize}
 	\item Brak oporów ruchu.
-	\item W rozpatrywanym przez nas przypadku materiał z ktorego wykonana jest rozpatrywana płyta jest jednorodny oraz izotropowy -- jego gęstość jest taka sama w każdym punkcie, a moduł Younga jest niezależny od kierunku.
+	\item W rozpatrywanym przez nas przypadku materiał z którego wykonana jest rozpatrywana płyta jest jednorodny oraz izotropowy -- jego gęstość jest taka sama w każdym punkcie, a moduł Younga jest niezależny od kierunku.
 	\item Parametry wejściowe symulacji można zmieniać podawać w zakresach przyjętych przez nas i zamieszczonych w tym sprawozdaniu.
 \end{itemize}
 
