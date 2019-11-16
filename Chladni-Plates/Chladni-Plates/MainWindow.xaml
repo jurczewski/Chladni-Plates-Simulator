@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Chladni Plates Simulator"  Width="700" Height="500">
+        Title="Chladni Plates Simulator"  Width="700" Height="500" ResizeMode="NoResize">
     <Grid Height="460">
         <Image Margin="250,10,10,10" Width="440" HorizontalAlignment="Left" Name="PixelBox" Height="440"/>
         <Label Content="Chladni-Plates-Simulator" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="229" FontSize="20"/>

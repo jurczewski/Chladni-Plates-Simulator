@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Windows;
@@ -24,9 +25,11 @@ namespace Chladni_Plates
             //Set bg to gray
             var width = Convert.ToInt32(PixelBox.Width);
             var height = Convert.ToInt32(PixelBox.Height);
-            var bitmap = new Bitmap(width, height);
-            BitmapOperations.FillBitmapWithColor(Color.LightGray, ref bitmap);
-            PixelBox.Source = BitmapOperations.BitmapToImageSource(bitmap);
+            //var bitmap = new Bitmap(width, height);
+            //BitmapOperations.FillBitmapWithColor(Color.LightGray, ref bitmap);
+            //PixelBox.Source = BitmapOperations.BitmapToImageSource(bitmap);
+
+            Algorithm();
         }
 
         #region Handlers
@@ -48,6 +51,10 @@ namespace Chladni_Plates
         }
         #endregion
 
-
+        public void Algorithm()
+        {      
+            var S = Matrix<int>.Build.Dense(Plate.Size, Plate.Size);
+            var M = Matrix<int>.Build.Dense(Plate.Size, Plate.Size);
+        }
     }
 }
