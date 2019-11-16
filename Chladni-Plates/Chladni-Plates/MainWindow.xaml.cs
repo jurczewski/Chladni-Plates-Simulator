@@ -54,8 +54,8 @@ namespace Chladni_Plates
         {
             int size = Plate.Size;
 
-            var S = Matrix<int>.Build.Dense(size, size);
-            var M = Matrix<int>.Build.Dense(size, size);
+            var S = Matrix<double>.Build.Dense(size, size);
+            var M = Matrix<double>.Build.Dense(size, size);
 
             for (int i = 1; i <= Plate.NumberOfTriangles; i++)
             {

@@ -11,9 +11,9 @@ namespace Chladni_Plates
         public static int NumberOfTriangles => TrianglesInRow * (Size - 1);
         public static int N => NumberOfTriangles;
 
-        public static Matrix<int> Stiffness = Matrix<int>.Build.Dense(3, 3, new int[] { 0, 0, 0, 0, 1, 0, 0, 0, 1 });
+        public static Matrix<double> Stiffness = Matrix<double>.Build.Dense(3, 3, new double[] { 0, 0, 0, 0, 1, 0, 0, 0, 1 });
 
-        public static Matrix<int> Mass = Matrix<int>.Build.Dense(3, 3, new int[] { 12, 4, 4, 4, 2, 1, 4, 1, 2 });
+        public static Matrix<double> Mass = Matrix<double>.Build.Dense(3, 3, new double[] { 12, 4, 4, 4, 2, 1, 4, 1, 2 });
 
         public static bool IsLesserEqual(this Point self, Point other)
             => self.X <= other.X || self.Y <= other.Y;
