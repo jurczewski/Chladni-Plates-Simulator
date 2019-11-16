@@ -1,6 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using System;
-using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -52,9 +51,35 @@ namespace Chladni_Plates
         #endregion
 
         public void Algorithm()
-        {      
-            var S = Matrix<int>.Build.Dense(Plate.Size, Plate.Size);
-            var M = Matrix<int>.Build.Dense(Plate.Size, Plate.Size);
+        {
+            int size = Plate.Size;
+
+            var S = Matrix<int>.Build.Dense(size, size);
+            var M = Matrix<int>.Build.Dense(size, size);
+
+            for (int i = 1; i <= Plate.NumberOfTriangles; i++)
+            {
+                var trianglePoints = Plate.GetTrianglePoints(i);
+                for(int j=0; j<3; j++)
+                {
+                    for (int k = 0; k < 3; k++)
+                    {
+                        var valueFromS = S.At(trianglePoints[j].I, trianglePoints[k].I);
+                        valueFromS += Plate.Stiffness.At(j, k);
+                        S.At(trianglePoints[j].I, trianglePoints[k].I, valueFromS);
+
+                        var valueFromM = M.At(trianglePoints[j].I, trianglePoints[k].I);
+                        valueFromM += Plate.Mass.At(j, k);
+                        M.At(trianglePoints[j].I, trianglePoints[k].I, valueFromM);
+                    }
+                }
+            }
+
+            var centerTriagnle = size / 2 * size / 2 + size;
+            S = S.RemoveColumn(centerTriagnle);
+            S = S.RemoveRow(centerTriagnle);
+            M = M.RemoveColumn(centerTriagnle);
+            M = M.RemoveRow(centerTriagnle);
         }
     }
 }

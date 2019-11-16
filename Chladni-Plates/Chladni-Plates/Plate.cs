@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra;
+using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace Chladni_Plates
 {
@@ -10,6 +10,16 @@ namespace Chladni_Plates
         public static int TrianglesInRow => 2 * (Size - 1);
         public static int NumberOfTriangles => TrianglesInRow * (Size - 1);
         public static int N => NumberOfTriangles;
+
+        public static Matrix<int> Stiffness = Matrix<int>.Build.Dense(3, 3, new int[] { 0, 0, 0, 0, 1, 0, 0, 0, 1 });
+
+        public static Matrix<int> Mass = Matrix<int>.Build.Dense(3, 3, new int[] { 12, 4, 4, 4, 2, 1, 4, 1, 2 });
+
+        public static bool IsLesserEqual(this Point self, Point other)
+            => self.X <= other.X || self.Y <= other.Y;
+
+        public static bool IsGreaterEqual(this Point self, Point other)
+            => self.X >= other.X || self.Y >= other.Y;
 
         /// <summary>
         /// Get vertices of i-th triangle
@@ -29,17 +39,17 @@ namespace Chladni_Plates
             if (isLower)
             {
                 return new List<Point>{
-                    new Point(column, row + 1),
-                    new Point(column+1, row + 1),
-                    new Point(column, row)
+                    new Point(column, row + 1, column + Size * (row + 1)),
+                    new Point(column + 1, row + 1, column + 1 + Size * (row + 1)),
+                    new Point(column, row, column + Size * row)
                 };
             }
             else
             {
                 return new List<Point>{
-                    new Point(column, row),
-                    new Point(column-1, row),
-                    new Point(column, row + 1)
+                    new Point(column, row, column + Size * row),
+                    new Point(column - 1, row, column - 1 + Size * row),
+                    new Point(column, row + 1, column + Size * (row + 1))
                 };
             }
         }

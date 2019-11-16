@@ -1,21 +1,10 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
-using System.Drawing;
 using System.Windows.Media;
 
 namespace Chladni_Plates
 {
     public static class Physics
     {
-        public static Matrix<int> Stiffness = Matrix<int>.Build.Dense(3, 3, new int[] { 0, 0, 0, 0, 1, 0, 0, 0, 1 });
-
-        public static Matrix<int> Mass = Matrix<int>.Build.Dense(3, 3, new int[] { 12, 4, 4, 4, 2, 1, 4, 1, 2 });
-        
-        public static bool IsLesserEqual(this Point self, Point other)
-            => self.X <= other.X || self.Y <= other.Y;
-
-        public static bool IsGreaterEqual(this Point self, Point other)
-            => self.X >= other.X || self.Y >= other.Y;
-
         public static void MultiplicationExample()
         {
 
@@ -28,7 +17,6 @@ namespace Chladni_Plates
             // matrixResult2 is also
             // equal to (70,100,150,220,240,352) 
             var matrixResult2 = matrix1 * matrix2;
-
         }
 
         //https://numerics.mathdotnet.com/api/MathNet.Numerics.LinearAlgebra.Factorization/Evd%601.htm
