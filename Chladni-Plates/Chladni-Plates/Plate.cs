@@ -6,7 +6,7 @@ namespace Chladni_Plates
 {
     public static class Plate
     {
-        public static int Size = 440;
+        public static int Size;
         public static int TrianglesInRow => 2 * (Size - 1);
         public static int NumberOfTriangles => TrianglesInRow * (Size - 1);
         public static int N => NumberOfTriangles;
@@ -51,6 +51,54 @@ namespace Chladni_Plates
                     new Point(column - 1, row, column - 1 + Size * row),
                     new Point(column, row + 1, column + Size * (row + 1))
                 };
+            }
+        }
+
+        public static Vector<double> RunAlgorithm()
+        {
+            int size = Plate.Size;
+            int ppp = size * size;
+
+            var S = Matrix<double>.Build.Dense(ppp, ppp);
+            var M = Matrix<double>.Build.Dense(ppp, ppp);
+
+            for (int i = 1; i <= Plate.NumberOfTriangles; i++)
+            {
+                var trianglePoints = Plate.GetTrianglePoints(i);
+                for (int j = 0; j < 3; j++)
+                {
+                    for (int k = 0; k < 3; k++)
+                    {
+                        var valueFromS = S.At(trianglePoints[j].I, trianglePoints[k].I);
+                        valueFromS += Plate.Stiffness.At(j, k);
+                        S.At(trianglePoints[j].I, trianglePoints[k].I, valueFromS);
+
+                        var valueFromM = M.At(trianglePoints[j].I, trianglePoints[k].I);
+                        valueFromM += Plate.Mass.At(j, k);
+                        M.At(trianglePoints[j].I, trianglePoints[k].I, valueFromM);
+                    }
+                }
+            }
+
+            Print2DArray(M.ToArray());
+
+            var centerTriagnle = size / 2 * size / 2 + size;
+            S = S.RemoveColumn(centerTriagnle).RemoveRow(centerTriagnle);
+            M = M.RemoveColumn(centerTriagnle).RemoveRow(centerTriagnle);
+
+            var R = M.Inverse() * S;
+            var result = R.Evd();
+            return result.EigenVectors.Column(0);
+        }
+        public static void Print2DArray<T>(T[,] matrix)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    Console.Write(matrix[i, j] + "\t");
+                }
+                Console.WriteLine();
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
@@ -7,6 +8,26 @@ namespace Chladni_Plates
 {
     public static class BitmapOperations
     {
+        public static void WritePixelsToBitmap(int width, int height, ref Vector<double> values, ref Bitmap bitmap)
+        {
+            int idx = 0;
+            //create random pixels
+            for (var y = 0; y < height - 1; y++)
+            {
+                for (var x = 0; x < width - 1; x++)
+                {
+                    var a = 255;
+                    var r = (int)(values[idx] * 255);
+                    var g = (int)(values[idx] * 255);
+                    var b = (int)(values[idx] * 255);
+
+                    //set
+                    bitmap.SetPixel(x, y, Color.FromArgb(a, r, g, b));
+                    idx++;
+                }
+            }
+        }
+
         public static Bitmap RandomColorPixelBitmap(int width, int height)
         {
             var bitmap = new Bitmap(width, height);
