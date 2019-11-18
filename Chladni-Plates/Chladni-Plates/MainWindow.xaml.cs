@@ -12,40 +12,39 @@ namespace Chladni_Plates
     /// </summary>
     public partial class MainWindow : Window
     {
+        public Matrix<double> AllValues { get; set; }
         public MainWindow()
         {
             InitializeComponent();
 
-            FrequencySlider.Minimum = 300;
-            FrequencySlider.Maximum = 6000;
+            var size = Plate.Size = 25;
 
-            ParticlesSlider.Minimum = 1;
-            ParticlesSlider.Maximum = 100000; //todo: consider width*height;
+            FrequencySlider.Minimum = 0;
+            FrequencySlider.Maximum = size - 1;
+
+            AllValues = Plate.RunAlgorithm();
 
             //Set bg to gray
-            //var width = Convert.ToInt32(PixelBox.Width);
-            //var height = Convert.ToInt32(PixelBox.Height);
-            //var bitmap = new Bitmap(width, height);
-            //BitmapOperations.FillBitmapWithColor(Color.LightGray, ref bitmap);
-            //PixelBox.Source = BitmapOperations.BitmapToImageSource(bitmap);
+            var bitmap = new Bitmap(size, size);
+            BitmapOperations.FillBitmapWithColor(Color.LightGray, ref bitmap);
+            PixelBox.Source = BitmapOperations.BitmapToImageSource(bitmap);
         }
 
         #region Handlers
         private void Generate_Click(object sender, RoutedEventArgs e)
         {
-            var width = 20;//Convert.ToInt32(PixelBox.Width);
-            var height = 20;// Convert.ToInt32(PixelBox.Height);
-            var numberOfParticles = Convert.ToInt32(ParticlesSlider.Value);
+            var size = Plate.Size;
 
-            Plate.Size = width;
-            var res = Plate.RunAlgorithm();
-            var bitmap = new Bitmap(width, height);
+            var frequency = Convert.ToInt32(FrequencySlider.Value);
+            var oneColumn = AllValues.Column(frequency);
 
-            var max = res.AbsoluteMaximum();
-            res = res.Multiply(1 / max);
-            res = res.PointwiseAbs();
+            var bitmap = new Bitmap(size, size);
 
-            BitmapOperations.WritePixelsToBitmap(width, height, ref res, ref bitmap);
+            var max = oneColumn.AbsoluteMaximum();
+            oneColumn = oneColumn.Multiply(1 / max);
+            oneColumn = oneColumn.PointwiseAbs();
+
+            BitmapOperations.WritePixelsToBitmap(size, size, ref oneColumn, ref bitmap);
             PixelBox.Source = BitmapOperations.BitmapToImageSource(bitmap);
         }
 
@@ -53,7 +52,7 @@ namespace Chladni_Plates
         {
             using var bitmap = BitmapOperations.BitmapImage2Bitmap((BitmapImage)PixelBox.Source);
             var path = Directory.GetCurrentDirectory();
-            bitmap.Save(path + $"/Chladni-Plates-Frequency-{FrequencySlider.Value}Hz-Particles{ParticlesSlider.Value}.png");
+            bitmap.Save(path + $"/Chladni-Plates-Frequency-{FrequencySlider.Value}Hz.png");
         }
         #endregion        
     }

@@ -1,6 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using System;
-using System.Collections.Generic;
 
 namespace Chladni_Plates
 {
@@ -19,23 +18,17 @@ namespace Chladni_Plates
 
         public Point GetPoint(int i)
         {
-            switch (i)
+            return i switch
             {
-                case 0:
-                    return P1;
-                case 1:
-                    return P2;
-                case 2:
-                    return P3;
-                default:
-                    throw new ArgumentException("out of bounds");
-            }
+                0 => P1,
+                1 => P2,
+                2 => P3,
+                _ => throw new ArgumentException("Index out of bounds."),
+            };
         }
     }
     public static class Plate
-    {
-        
-
+    {    
         public static int Size;
         public static int TrianglesInRow => 2 * (Size - 1);
         public static int NumberOfTriangles => TrianglesInRow * (Size - 1);
@@ -86,29 +79,29 @@ namespace Chladni_Plates
             }
         }
 
-        public static Vector<double> RunAlgorithm()
+        public static Matrix<double> RunAlgorithm()
         {
             int size = Plate.Size;
             int ppp = size * size;
-/*
-            double[] ss = new double[ppp * ppp];
-            double[] mm = new double[ppp * ppp];
-            for (int i = 1; i <= Plate.NumberOfTriangles; i++)
-            {
-                var triangles = Plate.GetTrianglePoints(i);
-                for (int j = 0; j < 3; j++)
-                {
-                    for (int k = 0; k < 3; k++)
-                    {
-                        double f = triangles.IsLower ? 1 : -1;
-                        int idx = triangles.GetPoint(j).I * ppp + triangles.GetPoint(k).I;
-                        ss[idx] += Plate.Stiffness[j, k] * f;
 
-                        ss[idx] += Plate.Mass[j, k] * f;
-                    }
-                }
-            }
-            */
+            //double[] ss = new double[ppp * ppp];
+            //double[] mm = new double[ppp * ppp];
+            //for (int i = 1; i <= Plate.NumberOfTriangles; i++)
+            //{
+            //    var triangles = Plate.GetTrianglePoints(i);
+            //    for (int j = 0; j < 3; j++)
+            //    {
+            //        for (int k = 0; k < 3; k++)
+            //        {
+            //            double f = triangles.IsLower ? 1 : -1;
+            //            int idx = triangles.GetPoint(j).I * ppp + triangles.GetPoint(k).I;
+            //            ss[idx] += Plate.Stiffness[j, k] * f;
+
+            //            ss[idx] += Plate.Mass[j, k] * f;
+            //        }
+            //    }
+            //}
+
             var S = Matrix<double>.Build.Dense(ppp, ppp);
             var M = Matrix<double>.Build.Dense(ppp, ppp);
             
@@ -119,32 +112,31 @@ namespace Chladni_Plates
                 {
                     for (int k = 0; k < 3; k++)
                     {
-                        var valueFromS = S.At(triangles.GetPoint(j).I, triangles.GetPoint(k).I);
-                        valueFromS += Plate.Stiffness[j, k];
-                        S.At(triangles.GetPoint(j).I, triangles.GetPoint(k).I, valueFromS);
+                        var valueJI = triangles.GetPoint(j).I;
+                        int valueKI = triangles.GetPoint(k).I;
 
-                        var valueFromM = M.At(triangles.GetPoint(j).I, triangles.GetPoint(k).I);
+                        var valueFromS = S.At(valueJI, valueKI);
+                        valueFromS += Plate.Stiffness[j, k];                        
+                        S.At(valueJI, valueKI, valueFromS);
+
+                        var valueFromM = M.At(valueJI, valueKI);
                         valueFromM += Plate.Mass[j, k];
-                        M.At(triangles.GetPoint(j).I, triangles.GetPoint(k).I, valueFromM);
+                        M.At(valueJI, valueKI, valueFromM);
                     }
                 }
-            }
-            
-            //Print2DArray(M.ToArray());
+            }           
 
             var centerTriagnle = size / 2 * (size + 1);
             S = S.RemoveColumn(centerTriagnle).RemoveRow(centerTriagnle);
             M = M.RemoveColumn(centerTriagnle).RemoveRow(centerTriagnle);
-            ppp--;
 
-            S = S / 2.0;
-            M = M / 24.0;
+            S /= 2.0;
+            M /= 24.0;
 
             var R = M.PseudoInverse() * S;
             var result = R.Evd();
-            return result.EigenVectors.Column(17);
-            
-           // return result;
+
+            return result.EigenVectors;            
         }
         public static void Print2DArray<T>(T[,] matrix)
         {
