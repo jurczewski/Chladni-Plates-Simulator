@@ -33,8 +33,8 @@ namespace Chladni_Plates
         #region Handlers
         private void Generate_Click(object sender, RoutedEventArgs e)
         {
-            var width = 10;//Convert.ToInt32(PixelBox.Width);
-            var height = 10;// Convert.ToInt32(PixelBox.Height);
+            var width = 20;//Convert.ToInt32(PixelBox.Width);
+            var height = 20;// Convert.ToInt32(PixelBox.Height);
             var numberOfParticles = Convert.ToInt32(ParticlesSlider.Value);
 
             Plate.Size = width;

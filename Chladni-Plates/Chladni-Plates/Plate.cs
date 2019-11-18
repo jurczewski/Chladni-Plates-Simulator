@@ -4,16 +4,46 @@ using System.Collections.Generic;
 
 namespace Chladni_Plates
 {
+    public class Triangle
+    {
+        public Point P1, P2, P3;
+        public bool IsLower;
+
+        public Triangle(Point p1, Point p2, Point p3, bool isLower)
+        {
+            P1 = p1;
+            P2 = p2;
+            P3 = p3;
+            IsLower = isLower;
+        }
+
+        public Point GetPoint(int i)
+        {
+            switch (i)
+            {
+                case 0:
+                    return P1;
+                case 1:
+                    return P2;
+                case 2:
+                    return P3;
+                default:
+                    throw new ArgumentException("out of bounds");
+            }
+        }
+    }
     public static class Plate
     {
+        
+
         public static int Size;
         public static int TrianglesInRow => 2 * (Size - 1);
         public static int NumberOfTriangles => TrianglesInRow * (Size - 1);
         public static int N => NumberOfTriangles;
 
-        public static Matrix<double> Stiffness = Matrix<double>.Build.Dense(3, 3, new double[] { 0, 0, 0, 0, 1, 0, 0, 0, 1 });
+        public static double [,] Stiffness = new double[,] { { 2, -1, -1 }, { -1, 1, 0 }, { -1, 0, 1 } };
 
-        public static Matrix<double> Mass = Matrix<double>.Build.Dense(3, 3, new double[] { 12, 4, 4, 4, 2, 1, 4, 1, 2 });
+        public static double [,] Mass = new double[,] { { 2, 1, 1 }, { 1, 2, 1 }, { 1, 1, 2 } };
 
         public static bool IsLesserEqual(this Point self, Point other)
             => self.X <= other.X || self.Y <= other.Y;
@@ -25,7 +55,7 @@ namespace Chladni_Plates
         /// Get vertices of i-th triangle
         /// </summary>
         /// <param name="i"></param>
-        public static List<Point> GetTrianglePoints(int i)
+        public static Triangle GetTrianglePoints(int i)
         {
             if (i < 1 || i > NumberOfTriangles)
             {
@@ -38,19 +68,21 @@ namespace Chladni_Plates
 
             if (isLower)
             {
-                return new List<Point>{
+                return new Triangle(
                     new Point(column, row + 1, column + Size * (row + 1)),
                     new Point(column + 1, row + 1, column + 1 + Size * (row + 1)),
-                    new Point(column, row, column + Size * row)
-                };
+                    new Point(column, row, column + Size * row),
+                    isLower
+                );
             }
             else
             {
-                return new List<Point>{
+                return new Triangle(
                     new Point(column, row, column + Size * row),
                     new Point(column - 1, row, column - 1 + Size * row),
-                    new Point(column, row + 1, column + Size * (row + 1))
-                };
+                    new Point(column, row + 1, column + Size * (row + 1)),
+                    isLower
+                );
             }
         }
 
@@ -58,37 +90,61 @@ namespace Chladni_Plates
         {
             int size = Plate.Size;
             int ppp = size * size;
-
-            var S = Matrix<double>.Build.Dense(ppp, ppp);
-            var M = Matrix<double>.Build.Dense(ppp, ppp);
-
+/*
+            double[] ss = new double[ppp * ppp];
+            double[] mm = new double[ppp * ppp];
             for (int i = 1; i <= Plate.NumberOfTriangles; i++)
             {
-                var trianglePoints = Plate.GetTrianglePoints(i);
+                var triangles = Plate.GetTrianglePoints(i);
                 for (int j = 0; j < 3; j++)
                 {
                     for (int k = 0; k < 3; k++)
                     {
-                        var valueFromS = S.At(trianglePoints[j].I, trianglePoints[k].I);
-                        valueFromS += Plate.Stiffness.At(j, k);
-                        S.At(trianglePoints[j].I, trianglePoints[k].I, valueFromS);
+                        double f = triangles.IsLower ? 1 : -1;
+                        int idx = triangles.GetPoint(j).I * ppp + triangles.GetPoint(k).I;
+                        ss[idx] += Plate.Stiffness[j, k] * f;
 
-                        var valueFromM = M.At(trianglePoints[j].I, trianglePoints[k].I);
-                        valueFromM += Plate.Mass.At(j, k);
-                        M.At(trianglePoints[j].I, trianglePoints[k].I, valueFromM);
+                        ss[idx] += Plate.Mass[j, k] * f;
                     }
                 }
             }
+            */
+            var S = Matrix<double>.Build.Dense(ppp, ppp);
+            var M = Matrix<double>.Build.Dense(ppp, ppp);
+            
+            for (int i = 1; i <= Plate.NumberOfTriangles; i++)
+            {
+                var triangles = Plate.GetTrianglePoints(i);
+                for (int j = 0; j < 3; j++)
+                {
+                    for (int k = 0; k < 3; k++)
+                    {
+                        var valueFromS = S.At(triangles.GetPoint(j).I, triangles.GetPoint(k).I);
+                        valueFromS += Plate.Stiffness[j, k];
+                        S.At(triangles.GetPoint(j).I, triangles.GetPoint(k).I, valueFromS);
 
-            Print2DArray(M.ToArray());
+                        var valueFromM = M.At(triangles.GetPoint(j).I, triangles.GetPoint(k).I);
+                        valueFromM += Plate.Mass[j, k];
+                        M.At(triangles.GetPoint(j).I, triangles.GetPoint(k).I, valueFromM);
+                    }
+                }
+            }
+            
+            //Print2DArray(M.ToArray());
 
-            var centerTriagnle = size / 2 * size / 2 + size;
+            var centerTriagnle = size / 2 * (size + 1);
             S = S.RemoveColumn(centerTriagnle).RemoveRow(centerTriagnle);
             M = M.RemoveColumn(centerTriagnle).RemoveRow(centerTriagnle);
+            ppp--;
 
-            var R = M.Inverse() * S;
+            S = S / 2.0;
+            M = M / 24.0;
+
+            var R = M.PseudoInverse() * S;
             var result = R.Evd();
-            return result.EigenVectors.Column(0);
+            return result.EigenVectors.Column(17);
+            
+           // return result;
         }
         public static void Print2DArray<T>(T[,] matrix)
         {
