@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
@@ -12,17 +13,18 @@ namespace Chladni_Plates
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Matrix<double> AllValues { get; set; }
+        public double[,] AllValues { get; set; }
         public MainWindow()
         {
             InitializeComponent();
 
-            var size = Plate.Size = 25;
+            var size = Algorithm.Size = 50;
 
             FrequencySlider.Minimum = 0;
             FrequencySlider.Maximum = size - 1;
 
-            AllValues = Plate.RunAlgorithm();
+            Algorithm.SolveSystem();
+            AllValues = Algorithm.EigenVectors;
 
             //Set bg to gray
             var bitmap = new Bitmap(size, size);
@@ -33,16 +35,13 @@ namespace Chladni_Plates
         #region Handlers
         private void Generate_Click(object sender, RoutedEventArgs e)
         {
-            var size = Plate.Size;
+            var size = Algorithm.Size;
 
             var frequency = Convert.ToInt32(FrequencySlider.Value);
-            var oneColumn = AllValues.Column(frequency);
+            
+            var oneColumn = CustomArray<double>.GetColumn(AllValues, frequency);
 
             var bitmap = new Bitmap(size, size);
-
-            var max = oneColumn.AbsoluteMaximum();
-            oneColumn = oneColumn.Multiply(1 / max);
-            oneColumn = oneColumn.PointwiseAbs();
 
             BitmapOperations.WritePixelsToBitmap(size, size, ref oneColumn, ref bitmap);
             PixelBox.Source = BitmapOperations.BitmapToImageSource(bitmap);

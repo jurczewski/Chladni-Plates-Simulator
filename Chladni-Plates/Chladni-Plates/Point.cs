@@ -2,15 +2,27 @@
 {
     public class Point
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int I { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
 
-        public Point(int x, int y, int i)
+        public Point(double x, double y, double i)
         {
             X = x;
             Y = y;
-            I = i;
+            Z = i;
+        }
+
+        public Point(double x, double y)
+        {
+            X = x;
+            Y = y;
+            Z = default;
+        }
+
+        public override string ToString()
+        {
+            return $"Point({X}, {Y}, {Z})";
         }
     }
 }
