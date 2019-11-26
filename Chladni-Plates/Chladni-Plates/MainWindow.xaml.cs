@@ -18,7 +18,8 @@ namespace Chladni_Plates
         {
             InitializeComponent();
 
-            var size = Algorithm.Size = 50;
+            //Algorithm.Size = 50;
+            var size = Algorithm.Size;
 
             FrequencySlider.Minimum = 0;
             FrequencySlider.Maximum = Math.Min(30, size - 1);
@@ -61,6 +62,7 @@ namespace Chladni_Plates
                     max = Math.Max(max, result[i, j]);
                 }
             }
+
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)

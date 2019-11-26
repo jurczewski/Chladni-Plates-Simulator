@@ -1,15 +1,16 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra;
+using System;
 using System.Collections.Generic;
 
 namespace Chladni_Plates
 {
     public static class Algorithm
     {
-        public static int Size;
+        public static int Size = 10;
         public static int TrianglesInRow => 2 * (Size - 1);
-        public static int TrainglesCount => 2 * (Size - 1) ^ 2;
-        public static List<Traingle> Triangles { get; set; }
-        public static int VerticesCount => Size ^ 2;
+        public static int TrainglesCount => 2 * (Size - 1) * (Size - 1);
+        public static List<Traingle> Triangles = new List<Traingle>();
+        public static int VerticesCount => Size * Size;
         public static int FixedVertices { get; set; }
 
         public static double[,] Stiffness = new double[,] {
@@ -102,7 +103,13 @@ namespace Chladni_Plates
                 }
             }
 
-            alglib.smatrixgevd(newStiffnessTotal, VerticesCount - 1, false, newMassTotal, false, 1, 1, out EigenValues, out EigenVectors);
+            var newStiffnessMatrix = Matrix<double>.Build.DenseOfArray(newStiffnessTotal);
+            var newMassTotalMatrix = Matrix<double>.Build.DenseOfArray(newMassTotal);
+
+            var R = newMassTotalMatrix.Inverse() * newStiffnessMatrix;
+            var result = R.Evd();
+
+            EigenVectors = result.EigenVectors.AsArray();
         }
 
         public static void SetSubmatrix(ref double[,] matrix, int indexI, int indexJ, ref double[,] submatrix)
