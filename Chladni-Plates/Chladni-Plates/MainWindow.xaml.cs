@@ -21,7 +21,7 @@ namespace Chladni_Plates
             var size = Algorithm.Size = 50;
 
             FrequencySlider.Minimum = 0;
-            FrequencySlider.Maximum = size - 1;
+            FrequencySlider.Maximum = Math.Min(30, size - 1);
 
             Algorithm.SolveSystem();
             AllValues = Algorithm.EigenVectors;
@@ -41,9 +41,38 @@ namespace Chladni_Plates
             
             var oneColumn = CustomArray<double>.GetColumn(AllValues, frequency);
 
+            double[,] result = new double[size, size];
+            double max = int.MinValue;
+            for(int i=0; i<size; i++)
+            {
+                for(int j=0; j<size; j++)
+                {
+                    if(i*size+j < Algorithm.FixedVertices)
+                    {
+                        result[i, j] = Math.Abs(oneColumn[i * size + j]);
+                    }else if (i*size+j == Algorithm.FixedVertices)
+                    {
+                        result[i, j] = 0;
+                    }
+                    else
+                    {
+                        result[i, j] = Math.Abs(oneColumn[i * size + j - 1]);
+                    }
+                    max = Math.Max(max, result[i, j]);
+                }
+            }
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    result[i, j] /= max;
+                }
+            }
+            var toPrint = Algorithm.IncreaseSize(result, 3);
+
             var bitmap = new Bitmap(size, size);
 
-            BitmapOperations.WritePixelsToBitmap(size, size, ref oneColumn, ref bitmap);
+            BitmapOperations.WritePixelsToBitmap(size, size, ref toPrint, ref bitmap);
             PixelBox.Source = BitmapOperations.BitmapToImageSource(bitmap);
         }
 
