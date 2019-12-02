@@ -50,7 +50,7 @@ Symulacja układu będzie odbywać się w przestrzeni dwuwymiarowej, gdzie będz
 \section{Opis obiektów biorących udział w symulacji}
 W naszej symulacji możemy wyróżnić jeden główny obiekt będący fundamentem zagadnienia które chcemy symulować. Jest to wprawiona w drgania stalowa płyta. Zakładamy, że jest ona wykonana z materiału o kształcie płaskiego kwadratu, długość boku którego jest parametrem wejściowym symulacji.
 
-Drgania własne dwuwymiarowej membrany można opisać równaniem falowym Bernoulliego
+Drgania własne dwuwymiarowej membrany można opisać równaniem falowym
 \begin{equation}
 \frac{\partial^2 \Psi}{\partial t^2} = c^2 \Delta \Psi,
 \end{equation}
@@ -189,7 +189,7 @@ W naszym modelu i symulacji przyjęliśmy kilka następujących uproszczeń:
 \end{itemize}
 
 \section{Środowisko i biblioteka graficzna}
-Program zostanie zrealizowany za pomocą języka Python 3.8.0.
+Program został zrealizowany za pomocą języka Python 3 przy wykorzystaniu bibliotek NumPy, SciPy oraz matplotlib i PyQt5 do stworzenia interfejsu graficznego.
 
 \section{Program}
 Poniżej przedstawiamy screeny z naszego programu.
@@ -208,7 +208,7 @@ Parametry wejściowe:
 \end{figure}
 
 Dokładność rozumiemy jako ilość pikseli która składa się na bok kwadratu - wizualizacji.
-\textcolor{red}{Nasz program obsługuje tylko te symulacje dla których wartość własna jest mniejsza od 0.5.}
+Dodatkowo nasz program pozwala na wizualizację tylko tych postaci drgań własnych dla których odpowiadająca  wartość własna jest mniejsza od 0.5. Suwak z etykietką "Eigenmode number" pokazuje numer porządkowy, gdzie uporządkowanie jest względem rosnącej wartości własnej.
 
 \section{Wizualizacje}
 Poniżej przedstawiamy uzyskane przez nas wizualizacje dla płytki o dokładności 50. Wartości pod rysunkami reprezentują postać drgań własnych.
